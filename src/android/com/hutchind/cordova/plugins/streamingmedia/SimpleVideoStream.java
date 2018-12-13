@@ -21,9 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
-public class SimpleVideoStream extends Activity implements
-MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
-MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
+public class SimpleVideoStream extends Activity implements MediaPlayer.OnCompletionListener,
+		MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 	private String TAG = getClass().getSimpleName();
 	private VideoView mVideoView = null;
 	private MediaPlayer mMediaPlayer = null;
@@ -33,30 +32,43 @@ MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 	private Boolean mShouldAutoClose = true;
 	private boolean mControls;
 
+	private veg.mediaplayer.sdk.MediaPlayer mPlayer;
+	private RtspPlayer rtspPlayer;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		Bundle b = getIntent().getExtras();
 		mVideoUrl = b.getString("mediaUrl");
 		mShouldAutoClose = b.getBoolean("shouldAutoClose", true);
 		mControls = b.getBoolean("controls", true);
 
+		rtspPlayer = new RtspPlayer();
 		RelativeLayout relLayout = new RelativeLayout(this);
 		relLayout.setBackgroundColor(Color.BLACK);
-		RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+		RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 		relLayoutParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+		mPlayer = new veg.mediaplayer.sdk.MediaPlayer(this);
+		mPlayer.setLayoutParams(relLayoutParam);
+		relLayout.addView(mPlayer);
 		mVideoView = new VideoView(this);
 		mVideoView.setLayoutParams(relLayoutParam);
 		relLayout.addView(mVideoView);
+
+		mVideoView.setVisibility(View.GONE);
+		mPlayer.setVisibility(View.GONE);
 
 		// Create progress throbber
 		mProgressBar = new ProgressBar(this);
 		mProgressBar.setIndeterminate(true);
 		// Center the progress bar
-		RelativeLayout.LayoutParams pblp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams pblp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		pblp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 		mProgressBar.setLayoutParams(pblp);
 		// Add progress throbber to view
@@ -71,31 +83,40 @@ MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 	}
 
 	private void play() {
-		mProgressBar.setVisibility(View.VISIBLE);
-		Uri videoUri = Uri.parse(mVideoUrl);
-		try {
-			mVideoView.setOnCompletionListener(this);
-			mVideoView.setOnPreparedListener(this);
-			mVideoView.setOnErrorListener(this);
-			mVideoView.setVideoURI(videoUri);
-			mMediaController = new MediaController(this);
-			mMediaController.setAnchorView(mVideoView);
-			mMediaController.setMediaPlayer(mVideoView);
-			if (!mControls) {
-				mMediaController.setVisibility(View.GONE);
+		if (isRtspLink(mVideoUrl)) {
+			rtspPlayer.play(mVideoUrl);
+		} else {
+
+			mProgressBar.setVisibility(View.VISIBLE);
+			Uri videoUri = Uri.parse(mVideoUrl);
+			try {
+				mVideoView.setOnCompletionListener(this);
+				mVideoView.setOnPreparedListener(this);
+				mVideoView.setOnErrorListener(this);
+				mVideoView.setVideoURI(videoUri);
+				mMediaController = new MediaController(this);
+				mMediaController.setAnchorView(mVideoView);
+				mMediaController.setMediaPlayer(mVideoView);
+				if (!mControls) {
+					mMediaController.setVisibility(View.GONE);
+				}
+				mVideoView.setMediaController(mMediaController);
+			} catch (Throwable t) {
+				Log.d(TAG, t.toString());
 			}
-			mVideoView.setMediaController(mMediaController);
-		} catch (Throwable t) {
-			Log.d(TAG, t.toString());
 		}
 	}
 
 	private void setOrientation(String orientation) {
 		if ("landscape".equals(orientation)) {
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		}else if("portrait".equals(orientation)) {
+		} else if ("portrait".equals(orientation)) {
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
+	}
+
+	private boolean isRtspLink(String link) {
+		return link.startsWith("rtsp");
 	}
 
 	private Runnable checkIfPlaying = new Runnable() {
@@ -160,16 +181,16 @@ MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 		StringBuilder sb = new StringBuilder();
 		sb.append("MediaPlayer Error: ");
 		switch (what) {
-			case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+		case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
 			sb.append("Not Valid for Progressive Playback");
 			break;
-			case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+		case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
 			sb.append("Server Died");
 			break;
-			case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+		case MediaPlayer.MEDIA_ERROR_UNKNOWN:
 			sb.append("Unknown");
 			break;
-			default:
+		default:
 			sb.append(" Non standard (");
 			sb.append(what);
 			sb.append(")");
@@ -194,7 +215,8 @@ MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		// The screen size changed or the orientation changed... don't restart the activity
+		// The screen size changed or the orientation changed... don't restart the
+		// activity
 		super.onConfigurationChanged(newConfig);
 	}
 

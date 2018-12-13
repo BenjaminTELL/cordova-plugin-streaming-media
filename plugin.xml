@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin
-	xmlns="http://apache.org/cordova/ns/plugins/1.0"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	id="cordova-plugin-streaming-media"
-	version="2.2.0">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+	xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-streaming-media" version="2.2.0">
 
 	<name>StreamingMedia</name>
 
@@ -48,24 +45,24 @@
 		<source-file src="src/ios/LandscapeVideo.m" />
 		<header-file src="src/ios/PortraitVideo.h" />
 		<source-file src="src/ios/PortraitVideo.m" />
-        
-        <header-file src="src/ios/RtspPlayer/RtspPlayerViewController.h" />
-        <source-file src="src/ios/RtspPlayer/RtspPlayerViewController.m" />
-        <resource-file src="src/ios/RtspPlayer/RtspPlayerViewController.xib" />
-        <resource-file src="src/ios/RtspPlayer/RtspPlayer.bundle" />
-        
-        <header-file src="src/ios/RtspPlayer/include/M3U8.h" />
-        <header-file src="src/ios/RtspPlayer/include/MediaPlayer.h" />
-        <header-file src="src/ios/RtspPlayer/include/MediaPlayerConfig.h" />
-        <header-file src="src/ios/RtspPlayer/include/MediaPlayerPlaySegment.h" />
-        <header-file src="src/ios/RtspPlayer/include/Thumbnailer.h" />
-        <header-file src="src/ios/RtspPlayer/include/ThumbnailerConfig.h" />
-        
-        <source-file src="src/ios/RtspPlayer/libMediaPlayerSDK.a" framework="true" />
-        <source-file src="src/ios/RtspPlayer/ffmpeg.framework" target-dir="lib" framework="true" />
-        <!-- embed="true" requires cordova-ios 4.4.0 and cordova 7.0.0 -->
-        <framework src="src/ios/RtspPlayer/ffmpeg.framework" embed="true" custom="true" />
-        
+
+		<header-file src="src/ios/RtspPlayer/RtspPlayerViewController.h" />
+		<source-file src="src/ios/RtspPlayer/RtspPlayerViewController.m" />
+		<resource-file src="src/ios/RtspPlayer/RtspPlayerViewController.xib" />
+		<resource-file src="src/ios/RtspPlayer/RtspPlayer.bundle" />
+
+		<header-file src="src/ios/RtspPlayer/include/M3U8.h" />
+		<header-file src="src/ios/RtspPlayer/include/MediaPlayer.h" />
+		<header-file src="src/ios/RtspPlayer/include/MediaPlayerConfig.h" />
+		<header-file src="src/ios/RtspPlayer/include/MediaPlayerPlaySegment.h" />
+		<header-file src="src/ios/RtspPlayer/include/Thumbnailer.h" />
+		<header-file src="src/ios/RtspPlayer/include/ThumbnailerConfig.h" />
+
+		<source-file src="src/ios/RtspPlayer/libMediaPlayerSDK.a" framework="true" />
+		<source-file src="src/ios/RtspPlayer/ffmpeg.framework" target-dir="lib" framework="true" />
+		<!-- embed="true" requires cordova-ios 4.4.0 and cordova 7.0.0 -->
+		<framework src="src/ios/RtspPlayer/ffmpeg.framework" embed="true" custom="true" />
+
 		<framework src="MediaPlayer.framework" />
 	</platform>
 
@@ -83,10 +80,16 @@
 			<activity android:configChanges="orientation|screenSize" android:name="com.hutchind.cordova.plugins.streamingmedia.SimpleAudioStream" android:label="Simple Audio Stream"></activity>
 			<activity android:configChanges="orientation|screenSize" android:name="com.hutchind.cordova.plugins.streamingmedia.SimpleVideoStream" android:label="Simple Video Stream"></activity>
 		</config-file>
+		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/RtspPlayer.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
 		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/SimpleAudioStream.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
 		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/SimpleVideoStream.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
 		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/StreamingMedia.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
 		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/ImageLoadTask.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
+
+		<source-file src="src/android/libs/mediaplayersdk.jar" target-dir="libs" />
+		<framework src="src/android/jniLibs" embed="true" custom="true" />
+
+
 	</platform>
 
 	<platform name="amazon-fireos">
