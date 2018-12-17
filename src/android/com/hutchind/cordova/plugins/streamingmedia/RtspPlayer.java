@@ -34,9 +34,19 @@ public class RtspPlayer extends Activity implements MediaPlayer.MediaPlayerCallb
         mediaPlayer = new veg.mediaplayer.sdk.MediaPlayer(this);
         mediaPlayer.setLayoutParams(relLayoutParam);
         relLayout.addView(mediaPlayer);
+
+        Bundle b = getIntent().getExtras();
+        if (b != null){
+                play(b.getString("url"));
+        }
+
     }
 
     public void play(String url) {
+
+        if(url.equals("") || url == null)
+            return;
+
         Context context = getApplicationContext();
         handler = new Handler();
         try {

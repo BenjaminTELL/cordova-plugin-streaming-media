@@ -84,7 +84,9 @@ public class SimpleVideoStream extends Activity implements MediaPlayer.OnComplet
 
 	private void play() {
 		if (isRtspLink(mVideoUrl)) {
-			rtspPlayer.play(mVideoUrl);
+			Intent i = new Intent(SimpleVideoStream.this,RtspPlayer.class);
+			i.putExtra("url",mVideoUrl);
+			startActivity(i);
 		} else {
 
 			mProgressBar.setVisibility(View.VISIBLE);
