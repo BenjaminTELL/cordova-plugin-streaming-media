@@ -1,19 +1,20 @@
-package android.com.hutchind.cordova.plugins.streamingmedia;
+package com.hutchind.cordova.plugins.streamingmedia;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.graphics.Color;
 import java.nio.ByteBuffer;
 import veg.mediaplayer.sdk.MediaPlayer;
 import veg.mediaplayer.sdk.MediaPlayerConfig;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback {
-
+public class RtspPlayer extends Activity implements MediaPlayer.MediaPlayerCallback {
     private static ViewGroup viewGroup;
     private MediaPlayer mediaPlayer;
     private Handler handler;
@@ -22,12 +23,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         // viewGroup = (ViewGroup)
         // ((ViewGroup)this.findViewById(android.R.id.content)).getChildAt(0);
         // play("rtsp://admin:11ghalad.@192.168.2.134:554/third");
-
         RelativeLayout relLayout = new RelativeLayout(this);
         relLayout.setBackgroundColor(Color.BLACK);
         RelativeLayout.LayoutParams relLayoutParam = new RelativeLayout.LayoutParams(
@@ -36,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
         mediaPlayer = new veg.mediaplayer.sdk.MediaPlayer(this);
         mediaPlayer.setLayoutParams(relLayoutParam);
         relLayout.addView(mediaPlayer);
-
     }
 
     public void play(String url) {
@@ -44,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
         handler = new Handler();
         try {
             mediaPlayer.getSurfaceView().setZOrderOnTop(true);
-
             SurfaceHolder trackHolder = mediaPlayer.getSurfaceView().getHolder();
             trackHolder.setFormat(android.R.color.transparent);
-
             MediaPlayerConfig config = new MediaPlayerConfig();
             config.setConnectionUrl(url);
             config.setConnectionNetworkProtocol(-1);
@@ -61,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
             config.setEnableAspectRatio(1);
             config.setDataReceiveTimeout(30000);
             config.setNumberOfCPUCores(0);
-            mPlayer.Open(config, this);
-
+            mediaPlayer.Open(config, this);
             final long streamPosition = mediaPlayer.getStreamPosition();
             handler = new Handler();
             runnable = new Runnable() {
@@ -78,9 +72,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
                     }
                 }
             };
-
             handler.postDelayed(runnable, 6000);
-
         } catch (Exception ex) {
             Toast.makeText(context, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -94,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onStart() {
         super.onStart();
-
         if (mediaPlayer != null)
             mediaPlayer.onStart();
     }
@@ -102,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onStop() {
         super.onStop();
-
         if (mediaPlayer != null)
             mediaPlayer.onStop();
     }
@@ -110,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onPause() {
         super.onPause();
-
         if (mediaPlayer != null)
             mediaPlayer.onPause();
     }
@@ -118,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         if (mediaPlayer != null)
             mediaPlayer.Close();
     }
@@ -126,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
         if (mediaPlayer != null)
             mediaPlayer.onWindowFocusChanged(hasFocus);
     }
@@ -134,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-
         if (mediaPlayer != null)
             mediaPlayer.onLowMemory();
     }
@@ -142,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.Media
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if (mediaPlayer != null)
             mediaPlayer.onDestroy();
     }
