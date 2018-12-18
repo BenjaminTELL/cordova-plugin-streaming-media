@@ -34,9 +34,6 @@ public class RtspPlayer extends Activity implements MediaPlayer.MediaPlayerCallb
         mediaPlayer = new veg.mediaplayer.sdk.MediaPlayer(this);
         mediaPlayer.setLayoutParams(relLayoutParam);
         relLayout.addView(mediaPlayer);
-
-        setOrientation(b.getString("orientation"));
-
 		setContentView(relLayout, relLayoutParam);
 
         Bundle b = getIntent().getExtras();
