@@ -87,7 +87,7 @@
 		<source-file src="src/android/com/hutchind/cordova/plugins/streamingmedia/ImageLoadTask.java" target-dir="src/com/hutchind/cordova/plugins/streamingmedia" />
 
 		<source-file src="src/android/libs/mediaplayersdk.jar" target-dir="libs" />
-		<framework src="src/android/jniLibs" embed="true" custom="true" />
+		<source-file src="src/android/jniLibs" embed="true" custom="true" />
 
 
 	</platform>

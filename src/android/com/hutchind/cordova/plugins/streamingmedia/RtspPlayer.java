@@ -35,6 +35,10 @@ public class RtspPlayer extends Activity implements MediaPlayer.MediaPlayerCallb
         mediaPlayer.setLayoutParams(relLayoutParam);
         relLayout.addView(mediaPlayer);
 
+        setOrientation(b.getString("orientation"));
+
+		setContentView(relLayout, relLayoutParam);
+
         Bundle b = getIntent().getExtras();
         if (b != null){
                 play(b.getString("url"));
