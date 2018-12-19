@@ -88,7 +88,7 @@
 
 		<source-file src="src/android/libs/mediaplayersdk.jar" target-dir="libs"/>
 		<framework src="src/android/jniLibs" embed="true" custom="true" />
-		<framework src="org.apache.httpcomponents:httpclient-android:4.3.5">
+		<framework src="org.apache.httpcomponents:httpclient-android:4.3.5"/>
 
 
 	</platform>
